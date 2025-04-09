@@ -4,27 +4,24 @@ Lingua::LO::NLP - Various Lao text processing functions
 
 # SYNOPSIS
 
-    use utf8;
-    use 5.10.1;
-    use open qw/ :std :encoding(UTF-8) /;
-    use Lingua::LO::NLP;
-    use Data::Dumper;
+```python
+from lib.Lingua.LO.NLP import LaoNLP
 
-    my $lao = Lingua::LO::NLP->new;
+lao = LaoNLP()
 
-    my @syllables = $lao->split_to_syllables("ສະບາຍດີ"); # qw( ສະ ບາຍ ດີ )
-    print Dumper(\@syllables);
+syllables = lao.split_to_syllables("ສະບາຍດີ")  # ['ສະ', 'ບາຍ', 'ດີ']
+print(syllables)
 
-    for my $syl (@syllables) {
-        my $analysis = $lao->analyze_syllable($syl);
-        printf "%s: %s\n", $analysis->syllable, $analysis->tone;
-        # ສະ: TONE_HIGH_STOP
-        # ບາຍ: TONE_LOW
-        # ດີ: TONE_LOW
-    }
+for syl in syllables:
+    analysis = lao.analyze_syllable(syl)
+    print(f"{analysis.syllable}: {analysis.tone}")
+    # ສະ: TONE_HIGH_STOP
+    # ບາຍ: TONE_LOW
+    # ດີ: TONE_LOW
 
-    say $lao->romanize("ສະບາຍດີ", variant => 'PCGN', hyphen => "\N{HYPHEN}");  # sa‐bay‐di
-    say $lao->romanize("ສະບາຍດີ", variant => 'IPA');                           # sa baːj diː
+print(lao.romanize("ສະບາຍດີ", variant='PCGN', hyphen="\u2010"))  # sa‐bay‐di
+print(lao.romanize("ສະບາຍດີ", variant='IPA'))  # saʔ baːj diː
+```
 
 # DESCRIPTION
 
@@ -36,8 +33,7 @@ other properties
 - romanize Lao text according to the PCGN standard or to IPA (experimental)
 
 These functions are basically just shortcuts to the functionality of some
-specialized modules: [Lingua::LO::NLP::Syllabify](https://metacpan.org/pod/Lingua::LO::NLP::Syllabify),
-[Lingua::LO::NLP::Analyze](https://metacpan.org/pod/Lingua::LO::NLP::Analyze) and [Lingua::LO::NLP::Romanize](https://metacpan.org/pod/Lingua::LO::NLP::Romanize). If
+specialized modules: `lib.Lingua.LO.NLP.Syllabify`, `lib.Lingua.LO.NLP.Analyze`, and `lib.Lingua.LO.NLP.Romanize`. If
 you need only one of them, you can shave off a little overhead by using those
 directly.
 
@@ -45,7 +41,9 @@ directly.
 
 ## new
 
-    new(option =E<gt> value, ...)
+```python
+new(option=value, ...)
+```
 
 The object constructor currently does nothing; there are no options. However,
 it is likely that there will be in future versions, therefore it is highly
@@ -54,33 +52,39 @@ introduce them.
 
 ## split\_to\_syllables
 
-    my @syllables = $object-E<gt>split_to_syllables($text, %options );
+```python
+syllables = object.split_to_syllables(text, **options)
+```
 
 Split Lao text into its syllables using a regexp modelled after PHISSAMAY,
 DALALOY and DURRANI: _Syllabification of Lao Script for Line Breaking_. Takes
 as its only mandatory parameter a character string to split and optionally a
-number of named options; see ["new" in Lingua::LO::NLP::Syllabify](https://metacpan.org/pod/Lingua::LO::NLP::Syllabify#new) for those.
+number of named options; see `lib.Lingua.LO.NLP.Syllabify` for those.
 Returns a list of syllables.
 
 ## analyze\_syllable
 
-    my $classified = $object-E<gt>analyze_syllable($syllable, %options);
+```python
+classified = object.analyze_syllable(syllable, **options)
+```
 
-Returns a [Lingua::LO::NLP::Analyze](https://metacpan.org/pod/Lingua::LO::NLP::Analyze) object that allows you to query
+Returns a `lib.Lingua.LO.NLP.Analyze` object that allows you to query
 various syllable properties such as core consonant, tone mark, vowel length and
 tone. See there for details.
 
 ## romanize
 
-    $object-E<gt>romanize($lao, %options);
+```python
+object.romanize(lao, **options)
+```
 
-Returns a romanized version of the text passed in as `$lao`. See
-["new" in Lingua::LO::NLP::Romanize](https://metacpan.org/pod/Lingua::LO::NLP::Romanize#new) for options. If you don't pass in _any_
-options, the default is `variant => 'PCGN'`.
+Returns a romanized version of the text passed in as `lao`. See
+`lib.Lingua.LO.NLP.Romanize` for options. If you don't pass in _any_
+options, the default is `variant='PCGN'`.
 
 # SEE ALSO
 
-[Lingua::LO::Romanize](https://metacpan.org/pod/Lingua::LO::Romanize) is the module that inspired this one. It has some
+`lib.Lingua.LO.Romanize` is the module that inspired this one. It has some
 issues with ambiguous syllable boundaries as in "ໃນວົງ" though.
 
 # AUTHOR
